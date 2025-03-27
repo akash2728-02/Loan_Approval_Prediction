@@ -20,8 +20,8 @@ st.title('The Loan Approval Process')
 st.header('(Use valid Input )', divider=True)
 
 # Model URLs (Update these with your actual GitHub links)
-logistic_model_url = "https://raw.githubusercontent.com/akash2728-02/Loan_Approval_Prediction/APP1/Logistic.pkl"
-random_model_url = "https://raw.githubusercontent.com/akash2728-02/Loan_Approval_Prediction/APP1/random.pkl"
+logistic_model_url = "https://github.com/akash2728-02/Loan_Approval_Prediction/blob/APP1/Logistic.pkl"
+random_model_url = "https://github.com/akash2728-02/Loan_Approval_Prediction/blob/APP1/random.pkl"
 
 # Download models from GitHub
 logistic_model_filename = download_model(logistic_model_url, "Logistic.pkl")
