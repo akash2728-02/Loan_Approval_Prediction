@@ -1,65 +1,72 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Mar 25 10:55:03 2025
-
-@author: akash
-"""
-
-import numpy as np 
+import numpy as np
 import streamlit as st
-import pickle as pk
+import joblib  # Use joblib instead of pickle
 
+# Title and description
+st.title('Loan Approval Prediction')
+st.header('Please Enter the Details Below:', divider=True)
 
-st.title('The Loan Aproval Process')
-st.header('(Use valid Input )',divider=True)
+# File paths (ensure correct model paths on Streamlit Cloud)
+model_path1 = 'path_to_your_models/Logistic.pkl'  # Update this to your actual model path on Streamlit Cloud
+model_path2 = 'path_to_your_models/random.pkl'   # Update this to your actual model path on Streamlit Cloud
 
+# Load Logistic Model
+try:
+    with open(model_path1, 'rb') as model_file:
+        model = joblib.load(model_file)
+    st.success("Logistic Regression Model Loaded Successfully!")
+except Exception as e:
+    st.error(f"Error loading Logistic model: {e}")
 
-
-model_path = r'C:\Users\akash\All Internships\AIS Intern\ML Project\demo\Logistic.pkl'
-
-with open (model_path,'rb') as model_file:
-    model=pk.load(model_file)
-
-
+# Load Random Forest Model
+try:
+    with open(model_path2, 'rb') as model_file2:
+        model2 = joblib.load(model_file2)
+    st.success("Random Forest Model Loaded Successfully!")
+except Exception as e:
+    st.error(f"Error loading Random Forest model: {e}")
 
 # Input fields
+Gender = st.number_input("Enter Gender (1 for Male, 0 for Female)", step=1)
+Married = st.number_input("Enter Married Status (1 for Yes, 0 for No)", step=1)
+Dependents = st.number_input("Enter Dependents", step=1)
+Education = st.number_input("Enter Education (1 for Graduate, 0 otherwise)", step=1)
+Self_Employed = st.number_input("Enter Self_Employed Status (1 for Yes, 0 for No)", step=1)
+ApplicantIncome = st.number_input("Enter Applicant Income", step=1)
+CoapplicantIncome = st.number_input("Enter Coapplicant Income", step=1)
+LoanAmount = st.number_input("Enter Loan Amount", step=1)
+Loan_Amount_Term = st.number_input("Enter Loan Amount Term (e.g. 360)", step=1)
+Credit_History = st.number_input("Enter Credit History (1 for Good, 0 for Poor)", step=1)
+Property_Area = st.number_input("Enter Property Area (0 for Rural, 1 for Semiurban, 2 for Urban)", step=1)
 
-Gender = st.number_input("Enter Gender(1 for Male OW 0)",step=1)
-Married = st.number_input("Enter Married Status( 1 for Yes OW 0)",step=1)
-Dependents = st.number_input("Enter Dependents",step=1)
-Education = st.number_input('Enter Education (1 for Graduate and 0 otherwise)',step=1)
-Self_Employed = st.number_input("enter the Self_Employed statue ( 1 for Yes) ",step=1)
-ApplicantIncome = st.number_input('Enter ApplicantIncome',step=1) 
-CoapplicantIncome = st.number_input('Enter CoapplicantIncome',step=1 )
-LoanAmount = st.number_input('enter LoanAmount',step=1)
-Loan_Amount_Term = st.number_input('Enter Loan_Amount_Term (360)',step=1)
-Credit_History  = st.number_input("enter Credit_History (1 for Yes ow 0)",step=1)
-P0roperty_Area = st.number_input('Enter Property_Area (0 for Rural,1 for semiurban ,2 for Urban)',step=1)
+# Prediction Button for Logistic Model
+if st.button('Predict with Logistic Model'):
+    input_data = np.array([Gender, Married, Dependents, Education, Self_Employed, ApplicantIncome, CoapplicantIncome, LoanAmount, Loan_Amount_Term, Credit_History, Property_Area])
+    input_data = input_data.reshape(1, -1)
 
+    try:
+        prediction = model.predict(input_data)
+        if prediction == 'Y':
+            st.success('Loan Approved! Thank you for using the app.')
+        else:
+            st.error('Loan Denied! Thank you for using the app.')
+    except Exception as e:
+        st.error(f"Error making prediction with Logistic model: {e}")
 
+# Prediction Button for Random Forest Model
+elif st.button('Predict with Random Forest Model'):
+    input_data = np.array([Gender, Married, Dependents, Education, Self_Employed, ApplicantIncome, CoapplicantIncome, LoanAmount, Loan_Amount_Term, Credit_History, Property_Area])
+    input_data = input_data.reshape(1, -1)
 
-if st.button('Predict'):
-    input_data = np.array([Gender,Married,Dependents,Education,Self_Employed,ApplicantIncome,CoapplicantIncome,LoanAmount,Loan_Amount_Term,Credit_History,Property_Area])
-    input_data= input_data.reshape(1,-1)
-    prediction = model.predict(input_data)
-    
-    if prediction == 'Y':
-        st.success('Aprove Loan')
-    else:
-        st.error('Reject')
-    
+    try:
+        prediction = model2.predict(input_data)
+        if prediction == 'Y':
+            st.success('Loan Approved! Thank you for using the app.')
+        else:
+            st.error('Loan Denied! Thank you for using the app.')
+    except Exception as e:
+        st.error(f"Error making prediction with Random Forest model: {e}")
 
-
-
-
-st.header('',divider=True )
-st.header('Created by Akash Gawade ,T & C apply')
-
-
-
-
-
-
-
-
-
+# Footer information
+st.header('', divider=True)
+st.header('Created by Akash Gawade | Terms and Conditions Apply')
