@@ -7,46 +7,41 @@ import pickle as pk
 import requests
 
 
-# Title and Header
-st.title('The Loan Approval Process')
-st.header('(Use valid Input)', divider=True)
-
-
-
-
-st.write("Starting model download...")
+import requests
+import joblib
+import os
+import streamlit as st
 
 def download_model(url, model_filename):
     response = requests.get(url)
     if response.status_code == 200:
         with open(model_filename, 'wb') as f:
             f.write(response.content)
-        st.write(f"Model downloaded successfully: {model_filename}")
         return model_filename
     else:
-        st.write(f"Failed to download model from {url} with status code {response.status_code}")
+        st.error(f"Failed to download model from {url}")
         return None
 
+# URLs for the raw .pkl files
 logistic_model_url = "https://raw.githubusercontent.com/akash2728-02/Loan_Approval_Prediction/APP1/Logistic.pkl"
 random_model_url = "https://raw.githubusercontent.com/akash2728-02/Loan_Approval_Prediction/APP1/random.pkl"
 
+# Download models
 logistic_model_filename = download_model(logistic_model_url, "Logistic.pkl")
 random_model_filename = download_model(random_model_url, "random.pkl")
 
-if logistic_model_filename:
-    st.write("Loading Logistic model...")
-    with open(logistic_model_filename, 'rb') as model_file:
-        model = pk.load(model_file)
+# Load models using joblib (instead of pickle)
+if logistic_model_filename and random_model_filename:
+    try:
+        with open(logistic_model_filename, 'rb') as model_file:
+            model = joblib.load(model_file)  # Use joblib for loading
+        with open(random_model_filename, 'rb') as model_file2:
+            model2 = joblib.load(model_file2)  # Use joblib for loading
+        st.write("Models loaded successfully!")
+    except Exception as e:
+        st.error(f"Error loading models: {str(e)}")
 else:
-    st.write("Logistic model download failed!")
-
-if random_model_filename:
-    st.write("Loading Random Forest model...")
-    with open(random_model_filename, 'rb') as model_file2:
-        model2 = pk.load(model_file2)
-else:
-    st.write("Random Forest model download failed!")
-
+    st.error("One or both model files failed to download.")
 
 
 
