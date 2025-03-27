@@ -1,35 +1,3 @@
-st.write("Starting model download...")
-
-def download_model(url, model_filename):
-    response = requests.get(url)
-    if response.status_code == 200:
-        with open(model_filename, 'wb') as f:
-            f.write(response.content)
-        st.write(f"Model downloaded successfully: {model_filename}")
-        return model_filename
-    else:
-        st.write(f"Failed to download model from {url} with status code {response.status_code}")
-        return None
-
-logistic_model_url = "https://raw.githubusercontent.com/akash2728-02/Loan_Approval_Prediction/APP1/Logistic.pkl"
-random_model_url = "https://raw.githubusercontent.com/akash2728-02/Loan_Approval_Prediction/APP1/random.pkl"
-
-logistic_model_filename = download_model(logistic_model_url, "Logistic.pkl")
-random_model_filename = download_model(random_model_url, "random.pkl")
-
-if logistic_model_filename:
-    st.write("Loading Logistic model...")
-    with open(logistic_model_filename, 'rb') as model_file:
-        model = pk.load(model_file)
-else:
-    st.write("Logistic model download failed!")
-
-if random_model_filename:
-    st.write("Loading Random Forest model...")
-    with open(random_model_filename, 'rb') as model_file2:
-        model2 = pk.load(model_file2)
-else:
-    st.write("Random Forest model download failed!")
 
 
 
