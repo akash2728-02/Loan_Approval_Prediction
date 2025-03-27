@@ -1,10 +1,9 @@
 
 import requests
-import joblib
-import numpy as np
+import os
+import pickle as pk
 import streamlit as st
 
-# Function to download model from GitHub
 def download_model(url, model_filename):
     response = requests.get(url)
     if response.status_code == 200:
@@ -15,30 +14,23 @@ def download_model(url, model_filename):
         st.error(f"Failed to download model from {url}")
         return None
 
-# Streamlit Title and Header
-st.title('The Loan Approval Process')
-st.header('(Use valid Input )', divider=True)
+# URL for the raw .pkl file
+logistic_model_url = "https://raw.githubusercontent.com/akash2728-02/Loan_Approval_Prediction/APP1/Logistic.pkl"
+random_model_url = "https://raw.githubusercontent.com/akash2728-02/Loan_Approval_Prediction/APP1/random.pkl"
 
-# Model URLs (Update these with your actual GitHub links)
-logistic_model_url = "https://github.com/akash2728-02/Loan_Approval_Prediction/blob/APP1/Logistic.pkl"
-random_model_url = "https://github.com/akash2728-02/Loan_Approval_Prediction/blob/APP1/random.pkl"
-
-# Download models from GitHub
+# Download models
 logistic_model_filename = download_model(logistic_model_url, "Logistic.pkl")
 random_model_filename = download_model(random_model_url, "random.pkl")
 
-# Load models using joblib
+# Load the models
 if logistic_model_filename and random_model_filename:
-    try:
-        with open(logistic_model_filename, 'rb') as model_file:
-            model = joblib.load(model_file)  # Use joblib to load the model
-        with open(random_model_filename, 'rb') as model_file2:
-            model2 = joblib.load(model_file2)  # Use joblib to load the model
-        st.write("Models loaded successfully!")
-    except Exception as e:
-        st.error(f"Error loading models: {str(e)}")
+    with open(logistic_model_filename, 'rb') as model_file:
+        model = pk.load(model_file)
+    with open(random_model_filename, 'rb') as model_file2:
+        model2 = pk.load(model_file2)
 else:
     st.error("One or both model files failed to download.")
+
 
 # Input fields for the user to provide loan data
 Gender = st.number_input("Enter Gender (1 for Male, 0 for Female)", step=1)
