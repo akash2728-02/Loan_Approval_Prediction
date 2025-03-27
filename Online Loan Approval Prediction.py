@@ -1,4 +1,4 @@
-pip install joblib
+!pip install joblib
 import requests
 import joblib
 import numpy as np
