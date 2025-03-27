@@ -1,3 +1,7 @@
+
+# Title and Header
+st.title('The Loan Approval Process')
+st.header('(Use valid Input)', divider=True)
 import numpy as np
 import streamlit as st
 import pickle as pk
@@ -20,9 +24,9 @@ def download_model(url, model_filename):
 
 # URLs of the model files on GitHub (raw links)
 logistic_model_url = "https://raw.githubusercontent.com/akash2728-02/Loan_Approval_Prediction/APP1/Logistic.pkl"
-random_model_url = "https://raw.githubusercontent.com/akash2728-02/Loan_Approval_Prediction/APP1/random.pkl"
+random_model_url = 'https://raw.githubusercontent.com/akash2728-02/Loan_Approval_Prediction/blob/APP1/Logistic.pkl'
 
-# Download the models
+# Download the models"https://raw.githubusercontent.com/akash2728-02/Loan_Approval_Prediction/APP1/random.pkl"
 logistic_model_filename = download_model(logistic_model_url, "Logistic.pkl")
 random_model_filename = download_model(random_model_url, "random.pkl")
 
